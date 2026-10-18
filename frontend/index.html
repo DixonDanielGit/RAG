@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema RAG - Asistente de Documentos</title>
+    <!-- Enlace a los estilos personalizados -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <!-- Fuente Google Fonts (Inter) para un aspecto profesional -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="chat-container">
+        <!-- Sidebar o Cabecera del Chat -->
+        <header class="chat-header">
+            <div class="header-info">
+                <h1>📚 Asistente RAG</h1>
+                <span class="status-indicator"></span>
+                <span class="status-text">Conectado a tus documentos</span>
+            </div>
+            <!-- Botón opcional para subir archivos -->
+            <label for="file-upload" class="upload-btn" title="Subir documento">
+                📎 Subir PDF
+            </label>
+            <input type="file" id="file-upload" accept=".pdf,.txt" style="display: none;">
+        </header>
+
+        <!-- Cuerpo del chat (Historial de mensajes) -->
+        <div class="chat-messages" id="chat-messages">
+            <!-- Mensaje de bienvenida del Bot -->
+            <div class="message bot-message">
+                <div class="message-content">
+                    <p>¡Hola! Soy tu asistente RAG. Sube un documento y pregúntame lo que necesites sobre su contenido.
+                    </p>
+                </div>
+                <span class="message-time">Hace un momento</span>
+            </div>
+        </div>
+
+        <!-- Barra de entrada de texto -->
+        <form class="chat-input-form" id="chat-form">
+            <input type="text" id="user-input" placeholder="Escribe tu pregunta sobre los documentos..."
+                autocomplete="off" required>
+            <button type="submit" id="send-btn" title="Enviar mensaje">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <!-- Script de lógica básica para simular el envío de mensajes -->
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        chatForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // 1. Agregar mensaje del usuario
+            appendMessage(text, 'user-message');
+            userInput.value = '';
+
+            // 2. Simular respuesta del bot (aquí después conectarás tu FastAPI)
+            setTimeout(() => {
+                appendMessage('Esta es una respuesta simulada de tu backend RAG. ¡Pronto conectaremos la inteligencia con FastAPI!', 'bot-message');
+            }, 1000);
+        });
+
+        function appendMessage(text, senderClass) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', senderClass);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+
+            const p = document.createElement('p');
+            p.textContent = text;
+            contentDiv.appendChild(p);
+
+            const timeSpan = document.createElement('span');
+            timeSpan.classList.add('message-time');
+            timeSpan.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeSpan);
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+
+</html>
